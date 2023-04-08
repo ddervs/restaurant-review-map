@@ -30,7 +30,7 @@ jobs:
     - name: Get locations
       run: python get_locations.py
     - name: Analyze sentiment
-      run: python analyze_sentiment.py
+      run: python compute_sentiment.py
     - name: Generate map
       run: python generate_map.py
     - name: Save Database

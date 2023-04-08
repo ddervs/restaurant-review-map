@@ -34,7 +34,7 @@ if max_date is None:
 else:
 # Convert max_date to ISO format for use in API request
     date_format = "%Y-%m-%dT%H:%M:%SZ"
-    max_date = datetime.strptime(max_date, date_format)
+    max_date = datetime.strptime(max_date, date_format) + timedelta(days=1)
 
 max_date_str = max_date.isoformat()
 
@@ -85,10 +85,8 @@ for data in responses:
         except KeyError:
             author = None
 
-        # Insert the data into the database
-        column_names = ','.join(columns)
-        placeholders = ','.join(['?'] * len(columns))
-        conn.execute(f'INSERT INTO reviews ({column_names}) VALUES ({placeholders})', (date, title, text, url, author))
+        print(date, title)
+        conn.execute(f'INSERT INTO reviews (date, title, text, url, author) VALUES (?, ?, ?, ?, ?)', (date, title, text, url, author))
         conn.commit()
 
 
