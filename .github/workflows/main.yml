@@ -3,6 +3,7 @@ name: Update Reviews
 on:
   schedule:
     - cron: '0 0 * * 0'  # Run every Sunday at midnight
+  workflow_dispatch:
 
 jobs:
   update_reviews:
@@ -12,36 +13,26 @@ jobs:
       BING_MAPS_API_KEY: ${{ secrets.BING_MAPS_API_KEY }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python 3.11
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.11'
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-      - name: Create Database
-        run: ./create_db.sh
-      - name: Download new reviews
-        run: python download_reviews.py
-      - name: Extract postcodes
-        run: python update_postcode.py
-      - name: Get locations
-        run: python get_locations.py
-      - name: Analyze sentiment
-        run: python compute_sentiment.py
-      - name: Generate map
-        run: python generate_map.py
-      - name: Save Database
-        run: ./save_db.sh
-      - name: Git Add and Push
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: 'Automatically commit changes'
-          commit_options: '--no-verify'
-          commit_user_name: 'GitHub Actions'
-          commit_user_email: 'actions@github.com'
-          file_pattern: '.'
-          branch: ${{ github.ref }}
-          push: true
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.11'
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    - name: Create Database
+      run: ./create_db.sh
+    - name: Download new reviews
+      run: python download_reviews.py
+    - name: Extract postcodes
+      run: python update_postcode.py
+    - name: Get locations
+      run: python get_locations.py
+    - name: Analyze sentiment
+      run: python compute_sentiment.py
+    - name: Generate map
+      run: python generate_map.py
+    - name: Save Database
+      run: ./save_db.sh
