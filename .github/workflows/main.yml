@@ -12,6 +12,10 @@ jobs:
       GUARDIAN_API_KEY: ${{ secrets.GUARDIAN_API_KEY }}
       BING_MAPS_API_KEY: ${{ secrets.BING_MAPS_API_KEY }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    permissions:
+      # Give the default GITHUB_TOKEN write permission to commit and push the
+      # added or changed files to the repository.
+      contents: write
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python 3.11
@@ -41,6 +45,3 @@ jobs:
         commit_options: '--no-verify'
         commit_user_name: 'GitHub Actions'
         commit_user_email: 'actions@github.com'
-        file_pattern: '.'
-        branch: ${{ github.ref }}
-        push: true
