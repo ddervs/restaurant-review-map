@@ -3,7 +3,7 @@ BEGIN TRANSACTION;
 CREATE TABLE reviews
              (id INTEGER PRIMARY KEY AUTOINCREMENT,
              date TEXT,
-             title TEXT,
+             title TEXT UNIQUE,
              text TEXT,
              url TEXT,
              author TEXT, postcode TEXT, location_long REAL, location_lat REAL, sentiment REAL);
