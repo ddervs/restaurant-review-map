@@ -3,6 +3,9 @@ name: Update Reviews
 on:
   schedule:
     - cron: '0 2 * * 1'  # Run every Monday at 2AM UTC
+  # Runs on pushes targeting the default branch
+  push:
+    branches: ["main"]
   workflow_dispatch:
 
 jobs:
