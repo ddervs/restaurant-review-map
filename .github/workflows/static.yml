@@ -2,9 +2,6 @@
 name: Deploy static content to Pages
 
 on:
-  # Runs on pushes targeting the default branch
-  push:
-    branches: ["main"]
   # Runs when Update Review workflow is completed
   workflow_run:
     workflows: ["Update Reviews"]
