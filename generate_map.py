@@ -41,4 +41,4 @@ for review in reviews:
     marker.add_to(m)
 
 # Save the map as an HTML file
-m.save('restaurant_reviews_map.html')
+m.save('index.html')
