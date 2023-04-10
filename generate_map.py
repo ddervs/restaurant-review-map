@@ -15,7 +15,7 @@ m = folium.Map(location=[center_lat, center_long], zoom_start=8)
 
 # Add a title to the map
 title_html = '''
-             <h3 align="center" style="font-size:20px"><b>Restaurant Reviews Map</b></h3><h4 align="center" style="font-size:14px"><b>Please forgive any inaccuracies! <a href="https://github.com/ddervs/restaurant-review-gpt">code</a></b></h4>
+             <h3 align="center" style="font-size:20px"><b>Restaurant Reviews Map</b></h3><h4 align="center" style="font-size:14px"><b>Please forgive any inaccuracies! <a href="https://github.com/ddervs/restaurant-review-map">code</a></b></h4>
              '''
 # title = folium.map.Marker(location=[center_lat, center_long], icon=None, popup=folium.Popup(html=title_html, max_width=2650))
 # title.add_to(m)
