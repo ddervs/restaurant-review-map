@@ -17,8 +17,8 @@ if 'sentiment' not in columns:
 sia = SentimentIntensityAnalyzer()
 
 # Get all reviews with null sentiment
-# c.execute('SELECT * FROM reviews WHERE sentiment IS NULL')
-c.execute('SELECT * FROM reviews')
+c.execute('SELECT * FROM reviews WHERE sentiment IS NULL')
+# c.execute('SELECT * FROM reviews')
 
 reviews = c.fetchall()
 
