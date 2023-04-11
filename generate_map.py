@@ -27,8 +27,6 @@ m.get_root().html.add_child(folium.Element(title_html))
 def get_color(sentiment):
     if sentiment < 0:
         return 'red'
-    elif sentiment < 0.2:
-        return 'lightgreen'
     else:
         return 'green'
 
