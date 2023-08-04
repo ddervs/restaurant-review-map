@@ -8,6 +8,6 @@ To run the code locally run the shell scripts as listed in [.github/workflows/ma
 
 ## Updating data
 
-There is a Github Actions workflow to autoupdate with new reviews each week. If there is any problematic data please create a Github Issue; or, even better, submit a PR with an edit to the SQLite db file directly.
+There is a Github Actions workflow to autoupdate with new reviews each week. If there is any problematic data please create a Github Issue; or, even better, submit a PR with an edit to the SQLite file [./reviews.sql](./reviews.sql) directly.
 
-No warranty, liability or support promised. This is a weekend project that may be useful to others.
+No warranty, liability or support promised. This is a weekend project that is shared in case it is useful to other people.
