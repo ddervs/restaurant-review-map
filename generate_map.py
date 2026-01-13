@@ -5,8 +5,8 @@ import sqlite3
 conn = sqlite3.connect('reviews.db')
 c = conn.cursor()
 
-# Get the reviews data
-c.execute('SELECT location_lat, location_long, sentiment, title, url FROM reviews')
+# Get the reviews data (exclude rows with NULL coordinates)
+c.execute('SELECT location_lat, location_long, sentiment, title, url FROM reviews WHERE location_lat IS NOT NULL AND location_long IS NOT NULL')
 reviews = c.fetchall()
 
 # Create a map centered on the first review

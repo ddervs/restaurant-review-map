@@ -32,7 +32,7 @@ max_date = c.fetchone()[0]
 if max_date is None:
     max_date = datetime.now() - timedelta(days=5*365)
 else:
-# Convert max_date to ISO format for use in API request
+    # Convert max_date to ISO format for use in API request
     date_format = "%Y-%m-%dT%H:%M:%SZ"
     max_date = datetime.strptime(max_date, date_format) + timedelta(days=1)
 
