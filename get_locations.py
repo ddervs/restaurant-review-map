@@ -1,6 +1,5 @@
-from geopy.geocoders import LocationIQ
+from geopy.geocoders import Photon
 import sqlite3
-import os
 
 # Connect to the database
 conn = sqlite3.connect('reviews.db')
@@ -18,7 +17,7 @@ if 'location_lat' not in columns:
     c.execute("ALTER TABLE reviews ADD COLUMN location_lat REAL")
 
 # Geocode each address and add the location_long and location_lat values to the database
-geolocator = LocationIQ(api_key=os.environ.get('LOCATIONIQ_API_KEY'))
+geolocator = Photon(user_agent="restaurant-review-map")
 
 for row in c.execute("SELECT * FROM reviews WHERE postcode IS NOT NULL AND (location_lat IS NULL OR location_long IS NULL)"):
     postcode = row[6]

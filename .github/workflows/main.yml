@@ -13,7 +13,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GUARDIAN_API_KEY: ${{ secrets.GUARDIAN_API_KEY }}
-      LOCATIONIQ_API_KEY: ${{ secrets.LOCATIONIQ_API_KEY }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     permissions:
       # Give the default GITHUB_TOKEN write permission to commit and push the
