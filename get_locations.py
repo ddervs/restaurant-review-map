@@ -1,5 +1,4 @@
-from geopy.geocoders import Bing
-from geopy.point import Point
+from geopy.geocoders import LocationIQ
 import sqlite3
 import os
 
@@ -19,12 +18,12 @@ if 'location_lat' not in columns:
     c.execute("ALTER TABLE reviews ADD COLUMN location_lat REAL")
 
 # Geocode each address and add the location_long and location_lat values to the database
-geolocator = Bing(api_key=os.environ.get('BING_MAPS_API_KEY'))
+geolocator = LocationIQ(api_key=os.environ.get('LOCATIONIQ_API_KEY'))
 
 for row in c.execute("SELECT * FROM reviews WHERE postcode IS NOT NULL AND (location_lat IS NULL OR location_long IS NULL)"):
     postcode = row[6]
     if row[7] is None or row[8] is None:  # check if location_lat or location_long is None
-        location = geolocator.geocode(postcode, user_location=Point(latitude=51.5073219, longitude=-0.1276473))
+        location = geolocator.geocode(postcode + ", UK")
         if location is not None:
             _c.execute("UPDATE reviews SET location_long=?, location_lat=? WHERE id=?", (location.longitude, location.latitude, row[0]))
 
