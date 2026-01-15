@@ -19,23 +19,51 @@ if not postcode_column_exists:
     c.execute('ALTER TABLE reviews ADD COLUMN postcode TEXT')
 
 
+def parse_ft_title(title):
+    """Extract restaurant and location from FT review title for geocoding"""
+    patterns = [
+        r'reviews?\s+(?:the\s+)?(.+?)\s+in\s+([A-Za-z\s]+?)(?:\s*[—–-]|$)',
+        r'reviews?\s+(?:the\s+)?(.+?),\s+([A-Za-z\s]+?)(?:\s*[—–-]|$)',
+        r'visits?\s+(?:the\s+)?(.+?)\s+in\s+([A-Za-z\s]+?)(?:\s*[—–-]|$)',
+    ]
+
+    for pattern in patterns:
+        match = re.search(pattern, title, re.IGNORECASE)
+        if match:
+            restaurant = match.group(1).strip()
+            location = match.group(2).strip()
+            # Validate - reject if parsed restaurant looks wrong
+            if 5 < len(restaurant) < 50:
+                return f"{restaurant} restaurant, {location}"
+
+    # Fallback: use whole title for geocoding
+    return title
+
+
 # Select all rows from the 'reviews' table
 c.execute('SELECT * FROM reviews')
 
 # Loop through each row and extract the postcode
 for row in c.fetchall():
-    # Check if the author is Grace Dent
-    if row[5] == 'Grace Dent':
-        # Extract the postcode from the title
-        postcode = row[2].split(':')[0].strip()
+    url = row[4]
+    title = row[2]
+    text = row[3]
+    author = row[5]
+
+    # Check if FT review (use title for geocoding)
+    if 'ft.com' in url:
+        postcode = parse_ft_title(title)
+    # Check if the author is Grace Dent (postcode in title)
+    elif author == 'Grace Dent':
+        postcode = title.split(':')[0].strip()
+    # Otherwise extract postcode from text (Observer Jay Rayner)
     else:
-        # Extract the postcode from the text
-        postcode_match = postcode_pattern.search(row[3])
+        postcode_match = postcode_pattern.search(text)
         if postcode_match:
             postcode = postcode_match.group(0)
         else:
             postcode = None
-    
+
     # Update the 'postcode' column with the extracted postcode
     c.execute('UPDATE reviews SET postcode = ? WHERE rowid = ?', (postcode, row[0]))
 
