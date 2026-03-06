@@ -21,19 +21,35 @@ if not postcode_column_exists:
 
 def parse_ft_title(title):
     """Extract restaurant and location from FT review title for geocoding"""
+    # Normalize curly/smart quotes to straight equivalents
+    title_norm = title.replace('\u2018', "'").replace('\u2019', "'").replace('\u201c', '"').replace('\u201d', '"')
+
+    # Pattern: "Restaurant, Location: description" (no "reviews" keyword)
+    colon_match = re.match(r"^['\"]?(.+?),\s+([A-Za-z'\s]+?):\s+", title_norm)
+    if colon_match:
+        restaurant = colon_match.group(1).strip().strip("'\"")
+        location = colon_match.group(2).strip()
+        if 0 < len(restaurant) < 50:
+            return f"{restaurant} restaurant, {location}"
+
+    word_class = r"[A-Za-z'\s]+"
     patterns = [
-        r'reviews?\s+(?:the\s+)?(.+?)\s+in\s+([A-Za-z\s]+?)(?:\s*[—–-]|$)',
-        r'reviews?\s+(?:the\s+)?(.+?),\s+([A-Za-z\s]+?)(?:\s*[—–-]|$)',
-        r'visits?\s+(?:the\s+)?(.+?)\s+in\s+([A-Za-z\s]+?)(?:\s*[—–-]|$)',
+        rf'reviews?\s+(?:the\s+)?(.+?)\s+in\s+({word_class})(?:\s*[—–-]|$)',
+        rf'reviews?\s+(?:the\s+)?(.+?),\s+({word_class})(?:\s*[—–-]|$)',
+        rf'reviews?\s+(?:the\s+)?(.+?)\s+at\s+({word_class})(?:\s*[—–-]|$)',
+        rf'visits?\s+(?:the\s+)?(.+?)\s+in\s+({word_class})(?:\s*[—–-]|$)',
     ]
 
+    generic_prefix = re.compile(r'^(a|an)\s', re.IGNORECASE)
     for pattern in patterns:
-        match = re.search(pattern, title, re.IGNORECASE)
+        match = re.search(pattern, title_norm, re.IGNORECASE)
         if match:
             restaurant = match.group(1).strip()
-            location = match.group(2).strip()
-            # Validate - reject if parsed restaurant looks wrong
-            if 5 < len(restaurant) < 50:
+            location = match.group(2).strip().strip("'\"")
+            if 0 < len(restaurant) < 50:
+                if generic_prefix.match(restaurant):
+                    # Generic name (e.g. "a cult restaurant") — geocode by location only
+                    return location
                 return f"{restaurant} restaurant, {location}"
 
     # Fallback: use whole title for geocoding

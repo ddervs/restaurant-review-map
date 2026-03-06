@@ -31,6 +31,8 @@ jobs:
       run: ./create_db.sh
     - name: Download new reviews
       run: python download_reviews.py
+    - name: Download FT reviews
+      run: python download_ft_reviews.py
     - name: Extract postcodes
       run: python update_postcode.py
     - name: Get locations
