@@ -37,6 +37,8 @@ jobs:
       run: python update_postcode.py
     - name: Get locations
       run: python get_locations.py
+    - name: Check closures
+      run: python check_closures.py
     - name: Analyze sentiment
       run: python compute_sentiment.py
     - name: Generate map
