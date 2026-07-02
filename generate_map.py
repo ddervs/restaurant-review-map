@@ -6,7 +6,7 @@ conn = sqlite3.connect('reviews.db')
 c = conn.cursor()
 
 # Get the reviews data (exclude rows with NULL coordinates)
-c.execute('SELECT location_lat, location_long, sentiment, title, url FROM reviews WHERE location_lat IS NOT NULL AND location_long IS NOT NULL')
+c.execute('SELECT location_lat, location_long, sentiment, title, url, COALESCE(closed, 0), closed_date FROM reviews WHERE location_lat IS NOT NULL AND location_long IS NOT NULL')
 reviews = c.fetchall()
 
 # Create a map centered on the first review
@@ -32,9 +32,14 @@ def get_color(sentiment):
 
 # Add markers for each review
 for review in reviews:
-    lat, lon, sentiment, title, url = review
-    color = get_color(sentiment)
-    popup_html = f'<a href="{url}">{title}</a>'
+    lat, lon, sentiment, title, url, closed, closed_date = review
+    if closed:
+        color = 'gray'
+        closed_label = f'[CLOSED since {closed_date}]' if closed_date else '[CLOSED]'
+        popup_html = f'<a href="{url}"><s>{title}</s> {closed_label}</a>'
+    else:
+        color = get_color(sentiment)
+        popup_html = f'<a href="{url}">{title}</a>'
     marker = folium.Marker(location=[lat, lon], icon=folium.Icon(color=color), popup=folium.Popup(html=popup_html, max_width=2650))
     marker.add_to(m)
 

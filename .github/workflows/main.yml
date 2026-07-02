@@ -14,7 +14,8 @@ jobs:
     env:
       GUARDIAN_API_KEY: ${{ secrets.GUARDIAN_API_KEY }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
+      GOOGLE_MAPS_API_KEY_GEOCODE: ${{ secrets.GOOGLE_MAPS_API_KEY_GEOCODE }}
+      GOOGLE_MAPS_API_KEY_PLACES: ${{ secrets.GOOGLE_MAPS_API_KEY_PLACES }}
     permissions:
       # Give the default GITHUB_TOKEN write permission to commit and push the
       # added or changed files to the repository.
@@ -37,6 +38,10 @@ jobs:
       run: python update_postcode.py
     - name: Get locations
       run: python get_locations.py
+    - name: Check closures
+      # Closure data is nice-to-have; never block the weekly map update on it
+      continue-on-error: true
+      run: python check_closures.py
     - name: Analyze sentiment
       run: python compute_sentiment.py
     - name: Generate map

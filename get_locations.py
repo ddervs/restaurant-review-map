@@ -9,20 +9,28 @@ conn = sqlite3.connect('reviews.db')
 c = conn.cursor()
 _c = conn.cursor()
 
-# Google Maps API key
-api_key = os.environ.get('GOOGLE_MAPS_API_KEY')
-if not api_key:
+# Google Maps API key (Geocoding-enabled; falls back to the legacy shared key)
+KEY_NAMES = ('GOOGLE_MAPS_API_KEY_GEOCODE', 'GOOGLE_MAPS_API_KEY')
+
+
+def load_api_key():
+    for name in KEY_NAMES:
+        if os.environ.get(name):
+            return os.environ[name]
     try:
         with open('.env') as f:
             for line in f:
-                if line.startswith('GOOGLE_MAPS_API_KEY='):
-                    api_key = line.strip().split('=', 1)[1]
-                    break
+                name, _, value = line.strip().partition('=')
+                if name in KEY_NAMES and value:
+                    return value
     except FileNotFoundError:
         pass
+    return None
 
+
+api_key = load_api_key()
 if not api_key:
-    print("ERROR: GOOGLE_MAPS_API_KEY not found")
+    print("ERROR: GOOGLE_MAPS_API_KEY_GEOCODE not found")
     exit(1)
 
 # Create location columns if they don't exist
