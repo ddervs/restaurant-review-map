@@ -19,8 +19,8 @@ c.execute(f'SELECT location_lat, location_long, sentiment, title, url, author, {
           f'FROM reviews WHERE location_lat IS NOT NULL AND location_long IS NOT NULL{roundup_guard}')
 reviews = c.fetchall()
 
-# Create a map centered on the first review
-center_lat, center_long = reviews[0][0], reviews[0][1]
+# Create a map centered on Edinburgh
+center_lat, center_long = 55.9533, -3.1883
 m = folium.Map(location=[center_lat, center_long], zoom_start=8)
 
 # Add a title to the map
