@@ -11,14 +11,16 @@ c = conn.cursor()
 c.execute("PRAGMA table_info(reviews)")
 columns = [column[1] for column in c.fetchall()]
 closed_select = "COALESCE(closed, 0), closed_date" if 'closed' in columns else "0, NULL"
+roundup_guard = " AND COALESCE(roundup, 0) = 0" if 'roundup' in columns else ""
 
-# Get the reviews data (exclude rows with NULL coordinates)
+# Get the reviews data (exclude rows with NULL coordinates, and round-ups
+# that don't describe a single restaurant)
 c.execute(f'SELECT location_lat, location_long, sentiment, title, url, author, {closed_select} '
-          'FROM reviews WHERE location_lat IS NOT NULL AND location_long IS NOT NULL')
+          f'FROM reviews WHERE location_lat IS NOT NULL AND location_long IS NOT NULL{roundup_guard}')
 reviews = c.fetchall()
 
-# Create a map centered on the first review
-center_lat, center_long = reviews[0][0], reviews[0][1]
+# Create a map centered on Edinburgh
+center_lat, center_long = 55.9533, -3.1883
 m = folium.Map(location=[center_lat, center_long], zoom_start=8)
 
 # Add a title to the map

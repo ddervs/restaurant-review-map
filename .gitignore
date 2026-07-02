@@ -2,6 +2,7 @@
 *~
 test_stuff.py
 *.csv
+!postcode_overrides.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
