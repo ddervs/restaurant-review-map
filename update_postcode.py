@@ -56,8 +56,10 @@ def parse_ft_title(title):
     return title
 
 
-# Select all rows from the 'reviews' table
-c.execute('SELECT * FROM reviews')
+# Only process rows that don't have a postcode yet: older rows have their
+# article text stripped from the committed dump (Guardian terms), so they
+# can't be re-extracted — and their stored postcode is still valid.
+c.execute('SELECT * FROM reviews WHERE postcode IS NULL')
 
 # Loop through each row and extract the postcode
 for row in c.fetchall():
@@ -74,7 +76,7 @@ for row in c.fetchall():
         postcode = title.split(':')[0].strip()
     # Otherwise extract postcode from text (Observer Jay Rayner)
     else:
-        postcode_match = postcode_pattern.search(text)
+        postcode_match = postcode_pattern.search(text or '')
         if postcode_match:
             postcode = postcode_match.group(0)
         else:
