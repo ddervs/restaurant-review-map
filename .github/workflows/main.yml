@@ -14,7 +14,8 @@ jobs:
     env:
       GUARDIAN_API_KEY: ${{ secrets.GUARDIAN_API_KEY }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      GOOGLE_MAPS_API_KEY: ${{ secrets.GOOGLE_MAPS_API_KEY }}
+      GOOGLE_MAPS_API_KEY_GEOCODE: ${{ secrets.GOOGLE_MAPS_API_KEY_GEOCODE }}
+      GOOGLE_MAPS_API_KEY_PLACES: ${{ secrets.GOOGLE_MAPS_API_KEY_PLACES }}
     permissions:
       # Give the default GITHUB_TOKEN write permission to commit and push the
       # added or changed files to the repository.
