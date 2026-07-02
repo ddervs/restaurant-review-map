@@ -1,0 +1,27 @@
+name: Quarterly sentiment rescore reminder
+
+on:
+  schedule:
+    - cron: '0 9 1 1,4,7,10 *'  # 09:00 UTC on 1 Jan / Apr / Jul / Oct
+  workflow_dispatch:
+
+permissions:
+  issues: write
+
+jobs:
+  open_reminder_issue:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Open rescore issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          existing=$(gh issue list --state open --search "Quarterly sentiment rescore in:title" --json number --jq length)
+          if [ "$existing" -gt 0 ]; then
+            echo "An open rescore issue already exists; skipping."
+            exit 0
+          fi
+          gh issue create \
+            --title "Quarterly sentiment rescore ($(date +%Y-%m))" \
+            --body-file .github/SENTIMENT_RESCORE.md
