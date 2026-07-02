@@ -66,8 +66,13 @@ for row in c.execute("SELECT * FROM reviews WHERE postcode IS NOT NULL AND (loca
         else:
             print(f"Failed to geocode: {postcode}")
 
-# Delete any rows with Null latitude or longitude
-c.execute("DELETE FROM reviews WHERE location_lat IS NULL OR location_long IS NULL")
+# Delete any rows with Null latitude or longitude. Round-ups are kept:
+# they intentionally have no location but their data (e.g. sentiment)
+# shouldn't be recomputed every week after re-download.
+c.execute("PRAGMA table_info(reviews)")
+has_roundup = 'roundup' in [column[1] for column in c.fetchall()]
+roundup_guard = " AND COALESCE(roundup, 0) = 0" if has_roundup else ""
+c.execute(f"DELETE FROM reviews WHERE (location_lat IS NULL OR location_long IS NULL){roundup_guard}")
 
 # Commit the changes and close the connection
 conn.commit()
