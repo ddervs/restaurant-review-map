@@ -23,10 +23,14 @@ title_html = '''
 m.get_root().html.add_child(folium.Element(title_html))
 
 
-# Define a color function based on sentiment value
+# Define a color function based on sentiment value.
+# Sentiment is on a [0, 1] scale (0.5 = mixed), so the old `< 0` check made
+# every marker green.
 def get_color(sentiment):
-    if sentiment < 0:
+    if sentiment < 0.4:
         return 'red'
+    elif sentiment < 0.6:
+        return 'orange'
     else:
         return 'green'
 

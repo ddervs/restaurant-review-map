@@ -12,6 +12,8 @@ c.execute("PRAGMA table_info(reviews)")
 columns = [column[1] for column in c.fetchall()]
 if 'sentiment' not in columns:
     c.execute("ALTER TABLE reviews ADD COLUMN sentiment REAL")
+if 'sentiment_source' not in columns:
+    c.execute("ALTER TABLE reviews ADD COLUMN sentiment_source TEXT")
 
 # Initialize VADER sentiment analyzer
 sia = SentimentIntensityAnalyzer()
@@ -38,7 +40,7 @@ for review in reviews:
     # Convert compound score from [-1, 1] to [0, 1] for consistency
     sentiment = (scores['compound'] + 1) / 2
 
-    c.execute('UPDATE reviews SET sentiment = ? WHERE id = ?', (sentiment, review_id))
+    c.execute("UPDATE reviews SET sentiment = ?, sentiment_source = 'vader' WHERE id = ?", (sentiment, review_id))
 
 # Commit changes to the database
 conn.commit()
