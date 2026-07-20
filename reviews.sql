@@ -605,6 +605,7 @@ INSERT INTO reviews VALUES(821,'2026-07-05T05:00:18Z','Appalachia, London N1: �
 INSERT INTO reviews VALUES(822,'2026-07-04T04:00:21Z','Jay Rayner reviews Appalachia, London: ‘A refreshed take on the London American restaurant’',NULL,'https://www.ft.com/content/a2ded5a4-2652-4672-9a19-37957ab2f7f4','Jay Rayner','Jay Rayner reviews Appalachia restaurant, London',-0.0879378999999999994,51.5294566000000031,0.5,'vader',0,0,NULL,'2026-07-06T06:18:39.911172');
 INSERT INTO reviews VALUES(823,'2026-07-12T05:00:10Z','Kawan, London W1: ‘This dish is bound to work, we think. But it doesn’t. It’s hideous’ – restaurant review | Grace Dent on restaurants',NULL,'https://www.theguardian.com/food/2026/jul/12/kawan-london-w1-grace-dent-restaurant-review','Grace Dent','Kawan, 12 Macclesfield Street, London W1, UK',-0.131179400000000001,51.5119759999999971,0.99890000000000001,'vader',0,0,NULL,'2026-07-13T05:26:28.211488');
 INSERT INTO reviews VALUES(824,'2026-07-11T04:00:18Z','Margaret’s, Cambridge: comfort with excellent tailoring — restaurant review',NULL,'https://www.ft.com/content/dcba4cf3-ea16-4e48-a2a8-a8978a5e8ba8','Jay Rayner','Margaret''s restaurant, Cambridge',0.124136499999999996,52.2138540999999989,0.867550000000000043,'vader',0,0,NULL,'2026-07-13T05:26:28.615453');
+INSERT INTO reviews VALUES(825,'2026-07-18T04:00:11Z','Jul’s, London: strange food at serious prices — restaurant review',NULL,'https://www.ft.com/content/b5eba584-7944-4baa-83d5-f15e53aa7f01','Jay Rayner','Jul''s restaurant, London',-0.133269300000000007,51.507712699999999,0.3634,'vader',0,0,NULL,'2026-07-20T07:35:40.968973');
 DELETE FROM sqlite_sequence;
-INSERT INTO sqlite_sequence VALUES('reviews',824);
+INSERT INTO sqlite_sequence VALUES('reviews',825);
 COMMIT;
